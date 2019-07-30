@@ -396,7 +396,8 @@ class Site(object):
             if not keep:
                 for tmpdir, tmpdir_fd in store.pending.values():
                     store.logdebug('Cleaning up %r', tmpdir)
-                    shutil.rmtree(tmpdir)
+                    # we ignore errors due to NFS silly-renamed files
+                    shutil.rmtree(tmpdir, True)
                     fcntl.flock(tmpdir_fd, fcntl.LOCK_UN)
                     os.close(tmpdir_fd)
                 store.pending.clear()
